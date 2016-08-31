@@ -8,12 +8,14 @@ module.exports = function(app){
 
   app.post('/cat', function(req, res){
   	_cats.push(req.body);
-  	res.join({info: 'cat created successfully'});
+  	console.log(_cats);
+  	res.json({info: 'cat created successfully'});
   });
 
 
   /*Read*/
   app.get('/cat/', function(req, res){
+  	console.log(_cats);
   	res.send(_cats);
   });
 
@@ -38,21 +40,17 @@ module.exports = function(app){
            }
    		);
    	    _.merge(_cats[index], req.body);
-   	    res.join({info: 'cat updated successfully'});
+   	    res.json({info: 'cat updated successfully'});
    });
 
 
    /* Delete */
 
    app.delete('/cat/:id', function(req, res){
-   	 var index = _.findIndex(
-           _cats, 
-           {
-           	 name: req.params.id
-           }
-   		);
-   	    _.unset(_cats[index], req.body);
-   	    res.join({info: 'cat updated successfully'});
+   	    _.remove(_cats, function(cat){
+   	    	return cat.name === req.params.id;
+   	    });
+   	    res.json({info: 'cat removed successfully'});
    });
 
 
